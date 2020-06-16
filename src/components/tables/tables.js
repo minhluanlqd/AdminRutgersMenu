@@ -1,77 +1,124 @@
-import React from 'react';
-import MaterialTable from 'material-table';
-
+import React, { useState, useEffect } from "react";
+import MaterialTable from "material-table";
+import axios from "axios";
+import { ca } from "date-fns/locale";
+/*
+change the state into 2 state
+fetch data from server
+*/
 export default function MaterialTableDemo() {
-
-  const [state, setState] = React.useState({
+  const [columns, setCol] = useState({
     columns: [
-      { title: 'Name', field: 'name' },
-      { title: 'Information', field: 'info' },
-      { title: 'Image', field: 'image', type: 'string' },
+      { title: "Name", field: "name" },
+      { title: "Information", field: "info" },
+      { title: "Image", field: "img", type: "string" },
       {
-        title: 'Campus',
-        field: 'campus',
-        lookup: { 1: 'Busch', 2: 'Livingston', 3: 'College Avenue', 4: 'Cook/Douglas' },
-      },
-    ],
-    data: [
-      { 
-        name: 'Pizza', 
-        info: '280g', 
-        image: "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg", 
-        campus: 1 
-      },
-      {
-        name: 'Cupcake', 
-        info: '28g', 
-        image: "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg", 
-        campus: 4
+        title: "Campus",
+        field: "campus",
+        lookup: {
+          busch: "Busch",
+          livingston: "Livingston",
+          collegeAve: "College Avenue",
+          cookdouglas: "Cook/Douglas",
+        },
       },
     ],
   });
 
+  /*const [state, setState] = React.useState(
+    [
+      {
+        name: "Pizza",
+        info: "280g",
+        image:
+          "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg",
+        campus: 1,
+      },
+      {
+        name: "Cupcake",
+        info: "28g",
+        image:
+          "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg",
+        campus: 4,
+      },
+    ],
+  );*/
+  const [state, setState] = React.useState([]);
+  const[shouldFetch, setShouldFetch] = useState(true)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      //let result = await axios.get('http://localhost:5000/food');
+      try {
+        let result = await axios.get(
+          "https://menurutgersbackend.herokuapp.com/food"
+        );
+        setState(result.data.data);
+        console.log(result)
+        //setShouldFetch(false)
+      } catch (e) {
+        if (e) console.log(e);
+      }
+    };
+    if (shouldFetch) {
+      fetchData();
+      setShouldFetch(false)
+    
+    }
+    else {
+      console.log(shouldFetch)
+    }
+  }, [state.length]);
+
   return (
-    <MaterialTable
-      title="Rutgers Menu"
-      columns={state.columns}
-      data={state.data}
-      editable={{
-        onRowAdd: (newData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              setState((prevState) => {
-                const data = [...prevState.data];
-                data.push(newData);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              if (oldData) {
+    <div>
+      <MaterialTable
+        title="Rutgers Menu"
+        columns={columns.columns}
+        data={state}
+        editable={{
+          onRowAdd: (newData) =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve();
                 setState((prevState) => {
-                  const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
-                  return { ...prevState, data };
+                  const data = prevState;
+                  console.log(newData)
+                  data.push(newData);
+                  console.log(state)
+                  return data;
                 });
-              }
-            }, 600);
-          }),
-        onRowDelete: (oldData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              setState((prevState) => {
-                const data = [...prevState.data];
-                data.splice(data.indexOf(oldData), 1);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-      }}
-    />
+              }, 600);
+            }),
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve();
+                if (oldData) {
+                  setState((prevState) => {
+                    const data = prevState;
+                    data[data.indexOf(oldData)] = newData;
+                    console.log(state)
+                    return data;
+                  });
+                }
+              }, 600);
+            }),
+          onRowDelete: (oldData) =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve();
+                setState((prevState) => {
+                  const data = prevState;
+                  data.splice(data.indexOf(oldData), 1);
+                  console.log(state)
+                  return data;
+                });
+              }, 600);
+            }),
+        }}
+      />
+      <button>Save</button>
+    </div>
   );
 }
