@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import axios from "axios";
-import { ca } from "date-fns/locale";
 /*
 change the state into 2 state
 fetch data from server
+return {...preState, data}
 */
 export default function MaterialTableDemo() {
   const [columns, setCol] = useState({
@@ -25,28 +25,27 @@ export default function MaterialTableDemo() {
     ],
   });
 
-  /*const [state, setState] = React.useState(
-    [
-      {
-        name: "Pizza",
-        info: "280g",
-        image:
-          "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg",
-        campus: 1,
-      },
-      {
-        name: "Cupcake",
-        info: "28g",
-        image:
-          "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg",
-        campus: 4,
-      },
-    ],
-  );*/
-  const [state, setState] = React.useState([]);
-  const[shouldFetch, setShouldFetch] = useState(true)
+  /*const [state, setState] = React.useState([
+    {
+      name: "Pizza",
+      info: "280g",
+      image:
+        "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg",
+      campus: 1,
+    },
+    {
+      name: "Cupcake",
+      info: "28g",
+      image:
+        "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg",
+      campus: 4,
+    },
+  ]);*/
+   const [state, setState] =useState([]);
+  const [shouldFetch, setShouldFetch] = useState(true);
 
   useEffect(() => {
+    console.log("I am usee effect")
     const fetchData = async () => {
       //let result = await axios.get('http://localhost:5000/food');
       try {
@@ -69,7 +68,7 @@ export default function MaterialTableDemo() {
       console.log(shouldFetch)
     }
   }, [state.length]);
-
+  console.log("render...");
   return (
     <div>
       <MaterialTable
@@ -82,10 +81,11 @@ export default function MaterialTableDemo() {
               setTimeout(() => {
                 resolve();
                 setState((prevState) => {
-                  const data = prevState;
-                  console.log(newData)
+                  const data = [...prevState];
+                  console.log(newData);
                   data.push(newData);
-                  console.log(state)
+                  console.log(state);
+
                   return data;
                 });
               }, 600);
@@ -96,9 +96,9 @@ export default function MaterialTableDemo() {
                 resolve();
                 if (oldData) {
                   setState((prevState) => {
-                    const data = prevState;
+                    const data = [...prevState];
                     data[data.indexOf(oldData)] = newData;
-                    console.log(state)
+                    console.log(state);
                     return data;
                   });
                 }
@@ -109,9 +109,9 @@ export default function MaterialTableDemo() {
               setTimeout(() => {
                 resolve();
                 setState((prevState) => {
-                  const data = prevState;
+                  const data = [...prevState];
                   data.splice(data.indexOf(oldData), 1);
-                  console.log(state)
+                  console.log(state);
                   return data;
                 });
               }, 600);
