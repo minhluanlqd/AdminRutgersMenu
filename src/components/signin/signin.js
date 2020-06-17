@@ -12,6 +12,20 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {red} from '@material-ui/core/colors/red'
+import { createMuiTheme } from '@material-ui/core/styles';
+import purple from '@material-ui/core/colors/purple';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: purple[500],
+    },
+    secondary: {
+      main: '#f44336',
+    },
+  },
+});
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -58,7 +72,8 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
-            color="secondary"
+            theme={theme}
+            color="primary"
           />
           <TextField
             variant="outlined"
@@ -70,7 +85,7 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
-            color="secondary"
+            color={red}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="secondary" />}
@@ -80,7 +95,7 @@ export default function SignIn() {
             type="submit"
             fullWidth
             variant="contained"
-            color="secondary"
+            color='c'
             className={classes.submit}
           >
             Sign In
