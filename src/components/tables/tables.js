@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import axios from "axios";
+
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
+import DeleteModal from './modalDelete';
 /*
 change the state into 2 state
 fetch data from server
 return {...preState, data}
 */
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
+
 export default function MaterialTableDemo() {
+
+  const classes = useStyles();
+
   const [columns, setCol] = useState({
     columns: [
       { title: "Name", field: "name" },
@@ -25,24 +41,9 @@ export default function MaterialTableDemo() {
     ],
   });
 
-  /*const [state, setState] = React.useState([
-    {
-      name: "Pizza",
-      info: "280g",
-      image:
-        "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg",
-      campus: 1,
-    },
-    {
-      name: "Cupcake",
-      info: "28g",
-      image:
-        "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg",
-      campus: 4,
-    },
-  ]);*/
-   const [state, setState] =useState([]);
+  const [state, setState] =useState([]);
   const [shouldFetch, setShouldFetch] = useState(true);
+  const [modalDeleteShow, setModalDeleteShow] = useState(false);
 
   useEffect(() => {
     console.log("I am usee effect")
@@ -118,7 +119,28 @@ export default function MaterialTableDemo() {
             }),
         }}
       />
-      <button>Save</button>
+      <Button
+        variant="contained"
+        color="primary"
+        size="large"
+        className={classes.button}
+        startIcon={<SaveIcon />}
+      >
+        Save
+      </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        size="large"
+        className={classes.button}
+        startIcon={<DeleteIcon />}
+        onClick={() => setModalDeleteShow(true)}
+      >
+        Delete All
+      </Button>
+      <DeleteModal 
+        show={modalDeleteShow}
+        onHide={() => setModalDeleteShow(false)}/>
     </div>
   );
 }
