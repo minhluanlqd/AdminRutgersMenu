@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MaterialTableDemo() {
+export default function MaterialTableDemo(props) {
+  const {token} = props;
 
   const classes = useStyles();
 
@@ -96,7 +97,7 @@ export default function MaterialTableDemo() {
                   console.log(state);
                   axios.post("https://menurutgersbackend.herokuapp.com/food", 
                   newData,
-                  {headers: {authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZWE2MjNiOTkwMmIxNDcwMDQ3OWU1MyIsImlhdCI6MTU5MjY3MjE5MCwiZXhwIjoxNTkyNzU4NTkwfQ.7yVAVWZZtSP9t_oTqK1jxk4hRhWUt-YMmwimSjRqgj4"}})
+                  {headers: {authorization: token}})
                       .then(respone => console.log(respone))
                       .catch(e => console.log(e)) // update data on server
                   return data;
@@ -117,7 +118,7 @@ export default function MaterialTableDemo() {
                     // console.log(newData._id);
                     axios.patch("https://menurutgersbackend.herokuapp.com/food/" + id, 
                     newData,
-                    {headers: {authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZWE2MjNiOTkwMmIxNDcwMDQ3OWU1MyIsImlhdCI6MTU5MjY3MjE5MCwiZXhwIjoxNTkyNzU4NTkwfQ.7yVAVWZZtSP9t_oTqK1jxk4hRhWUt-YMmwimSjRqgj4"}})
+                    {headers: {authorization: token}})
                     .then(respone => console.log(respone))
                     .catch(e => console.log(e)) // update data on server
                    
@@ -136,7 +137,7 @@ export default function MaterialTableDemo() {
                   const id = oldData._id;
                   console.log(state);
                   axios.delete("https://menurutgersbackend.herokuapp.com/food/" + id, 
-                    {headers: {authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZWE2MjNiOTkwMmIxNDcwMDQ3OWU1MyIsImlhdCI6MTU5MjY3MjE5MCwiZXhwIjoxNTkyNzU4NTkwfQ.7yVAVWZZtSP9t_oTqK1jxk4hRhWUt-YMmwimSjRqgj4"}})
+                    {headers: {authorization: token}})
                     .then(respone => console.log(respone))
                     .catch(e => console.log(e)) // update data on server
 
