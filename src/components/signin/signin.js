@@ -11,26 +11,7 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-<<<<<<< HEAD
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import {red} from '@material-ui/core/colors/red'
-import { createMuiTheme } from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: purple[500],
-    },
-    secondary: {
-      main: '#f44336',
-    },
-  },
-});
-=======
 import { makeStyles, createMuiTheme } from '@material-ui/core/styles';
->>>>>>> 2092c1bb85a270e2ce4a0d411caf914de980521d
 
 const theme = createMuiTheme({
   palette: {
@@ -87,63 +68,13 @@ const useStyles = makeStyles(() => ({
 
 export default function SignIn() {
   const classes = useStyles();
+  const onSubmit = e =>{
+    console.log(e);
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-<<<<<<< HEAD
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            theme={theme}
-            color="primary"
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            color={red}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="secondary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color='c'
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2" color="secondary">
-                Forgot password?
-              </Link>
-=======
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
@@ -153,7 +84,7 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} noValidate={false} onSubmit={onSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -198,7 +129,6 @@ export default function SignIn() {
                   Forgot password?
                 </Link>
               </Grid>
->>>>>>> 2092c1bb85a270e2ce4a0d411caf914de980521d
             </Grid>
           </form>
         </div>

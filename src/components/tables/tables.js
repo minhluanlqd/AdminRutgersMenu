@@ -119,6 +119,7 @@ export default function MaterialTableDemo() {
         }}
       />
       <button>Save</button>
+      <button onClick={() => setState([])}>Delete All</button>
     </div>
   );
 }

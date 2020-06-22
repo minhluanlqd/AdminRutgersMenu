@@ -1,13 +1,39 @@
-import React from 'react';
-import './App.css';
-import Table from '../components/tables/tables';
-import SignIn from '../components/signin/signin';
+import React, { useState } from "react";
+import "./App.css";
+import SignInPage from "../pages/SignInPage";
+import ManagerPage from "../pages/ManagerPage";
+import { Route, Switch, Redirect } from "react-router-dom";
 
 function App() {
+  let [userState, setUserState] = useState("");
+  console.log(userState)
+
   return (
     <div className="App">
-         {/* <Table/> */}
-          <SignIn/>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={() =>
+            userState ? (
+              <Redirect to="/manager" />
+            ) : (
+              <SignInPage setUserState={setUserState} />
+            )
+          }
+        />
+        <Route
+          exact
+          path="/manager"
+          render={() =>
+            userState ? (
+              <ManagerPage setUserState={setUserState} />
+            ) : (
+              <Redirect to="/" />
+            )
+          }
+        />
+      </Switch>
     </div>
   );
 }
