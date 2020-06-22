@@ -10,30 +10,8 @@ function App() {
 
   return (
     <div className="App">
-      <Switch>
-        <Route
-          exact
-          path="/"
-          render={() =>
-            userState ? (
-              <Redirect to="/manager" />
-            ) : (
-              <SignInPage setUserState={setUserState} />
-            )
-          }
-        />
-        <Route
-          exact
-          path="/manager"
-          render={() =>
-            userState ? (
-              <ManagerPage setUserState={setUserState} />
-            ) : (
-              <Redirect to="/" />
-            )
-          }
-        />
-      </Switch>
+         <Table/>
+          {/* <SignIn/> */}
     </div>
   );
 }

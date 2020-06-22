@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import axios from "axios";
+
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
+import DeleteModal from './modalDelete';
 /*
 change the state into 2 state
 fetch data from server
 return {...preState, data}
 */
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
+
 export default function MaterialTableDemo() {
+
+  const classes = useStyles();
+
   const [columns, setCol] = useState({
     columns: [
       { title: "Name", field: "name" },
@@ -25,27 +41,14 @@ export default function MaterialTableDemo() {
     ],
   });
 
-  /*const [state, setState] = React.useState([
-    {
-      name: "Pizza",
-      info: "280g",
-      image:
-        "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg",
-      campus: 1,
-    },
-    {
-      name: "Cupcake",
-      info: "28g",
-      image:
-        "https://www.simplyrecipes.com/wp-content/uploads/2019/09/easy-pepperoni-pizza-lead-4.jpg",
-      campus: 4,
-    },
-  ]);*/
-   const [state, setState] =useState([]);
+  const [state, setState] =useState([]);
   const [shouldFetch, setShouldFetch] = useState(true);
+  const [modalDeleteShow, setModalDeleteShow] = useState(false);
+
+  // fetch data from server Heroku
 
   useEffect(() => {
-    console.log("I am usee effect")
+    // console.log("I am usee effect") // Test use effect
     const fetchData = async () => {
       //let result = await axios.get('http://localhost:5000/food');
       try {
@@ -68,7 +71,13 @@ export default function MaterialTableDemo() {
       console.log(shouldFetch)
     }
   }, [state.length]);
-  console.log("render...");
+
+  // console.log("render...");   // test whether the web renders or not
+
+  // Edit data from server 
+  // CODE GOES HERE: (just for fun)
+
+
   return (
     <div>
       <MaterialTable
@@ -85,7 +94,11 @@ export default function MaterialTableDemo() {
                   console.log(newData);
                   data.push(newData);
                   console.log(state);
-
+                  axios.post("https://menurutgersbackend.herokuapp.com/food", 
+                  newData,
+                  {headers: {authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZWE2MjNiOTkwMmIxNDcwMDQ3OWU1MyIsImlhdCI6MTU5MjY3MjE5MCwiZXhwIjoxNTkyNzU4NTkwfQ.7yVAVWZZtSP9t_oTqK1jxk4hRhWUt-YMmwimSjRqgj4"}})
+                      .then(respone => console.log(respone))
+                      .catch(e => console.log(e)) // update data on server
                   return data;
                 });
               }, 600);
@@ -98,8 +111,17 @@ export default function MaterialTableDemo() {
                   setState((prevState) => {
                     const data = [...prevState];
                     data[data.indexOf(oldData)] = newData;
-                    console.log(state);
-                    return data;
+                    const id = oldData._id;
+                    // console.log(state);
+                    // console.log(oldData._id);
+                    // console.log(newData._id);
+                    axios.patch("https://menurutgersbackend.herokuapp.com/food/" + id, 
+                    newData,
+                    {headers: {authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZWE2MjNiOTkwMmIxNDcwMDQ3OWU1MyIsImlhdCI6MTU5MjY3MjE5MCwiZXhwIjoxNTkyNzU4NTkwfQ.7yVAVWZZtSP9t_oTqK1jxk4hRhWUt-YMmwimSjRqgj4"}})
+                    .then(respone => console.log(respone))
+                    .catch(e => console.log(e)) // update data on server
+                   
+                   return data;
                   });
                 }
               }, 600);
@@ -111,15 +133,44 @@ export default function MaterialTableDemo() {
                 setState((prevState) => {
                   const data = [...prevState];
                   data.splice(data.indexOf(oldData), 1);
+                  const id = oldData._id;
                   console.log(state);
+                  axios.delete("https://menurutgersbackend.herokuapp.com/food/" + id, 
+                    {headers: {authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZWE2MjNiOTkwMmIxNDcwMDQ3OWU1MyIsImlhdCI6MTU5MjY3MjE5MCwiZXhwIjoxNTkyNzU4NTkwfQ.7yVAVWZZtSP9t_oTqK1jxk4hRhWUt-YMmwimSjRqgj4"}})
+                    .then(respone => console.log(respone))
+                    .catch(e => console.log(e)) // update data on server
+
                   return data;
                 });
               }, 600);
             }),
         }}
       />
-      <button>Save</button>
-      <button onClick={() => setState([])}>Delete All</button>
+      <Button
+        variant="contained"
+        color="primary"
+        size="large"
+        className={classes.button}
+        startIcon={<SaveIcon />}
+      >
+        Save
+      </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        size="large"
+        className={classes.button}
+        startIcon={<DeleteIcon />}
+        onClick={() => setModalDeleteShow(true)}
+      >
+        Delete All
+      </Button>
+      <DeleteModal 
+        show={modalDeleteShow}
+        onHide={() => setModalDeleteShow(false)}
+        onConfirm={() => {
+          setState([])
+          setModalDeleteShow(false)}}/>
     </div>
   );
 }
