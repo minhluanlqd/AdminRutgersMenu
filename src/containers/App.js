@@ -13,7 +13,7 @@ function App() {
 
   return (
     <div className="App">
-      {userState ?<Table token={userState.token} />:<SignIn setUserState={setUserState} /> }
+      {userState ?<Table setUserState={setUserState} token={userState.token} />:<SignIn setUserState={setUserState} /> }
     </div>
   );
 }

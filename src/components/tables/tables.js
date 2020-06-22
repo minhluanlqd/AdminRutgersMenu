@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import axios from "axios";
 
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
-import SaveIcon from '@material-ui/icons/Save';
-import DeleteModal from './modalDelete';
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
+import DeleteIcon from "@material-ui/icons/Delete";
+import SaveIcon from "@material-ui/icons/Save";
+import DeleteModal from "./modalDelete";
 /*
 change the state into 2 state
 fetch data from server
@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MaterialTableDemo(props) {
-  const {token} = props;
+  const { token } = props;
+  const { setUserState } = props;
 
   const classes = useStyles();
 
@@ -42,7 +43,7 @@ export default function MaterialTableDemo(props) {
     ],
   });
 
-  const [state, setState] =useState([]);
+  const [state, setState] = useState([]);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [modalDeleteShow, setModalDeleteShow] = useState(false);
 
@@ -57,7 +58,7 @@ export default function MaterialTableDemo(props) {
           "https://menurutgersbackend.herokuapp.com/food"
         );
         setState(result.data.data);
-        console.log(result)
+        console.log(result);
         //setShouldFetch(false)
       } catch (e) {
         if (e) console.log(e);
@@ -65,19 +66,16 @@ export default function MaterialTableDemo(props) {
     };
     if (shouldFetch) {
       fetchData();
-      setShouldFetch(false)
-    
-    }
-    else {
-      console.log(shouldFetch)
+      setShouldFetch(false);
+    } else {
+      console.log(shouldFetch);
     }
   }, [state.length]);
 
   // console.log("render...");   // test whether the web renders or not
 
-  // Edit data from server 
+  // Edit data from server
   // CODE GOES HERE: (just for fun)
-
 
   return (
     <div>
@@ -95,11 +93,14 @@ export default function MaterialTableDemo(props) {
                   console.log(newData);
                   data.push(newData);
                   console.log(state);
-                  axios.post("https://menurutgersbackend.herokuapp.com/food", 
-                  newData,
-                  {headers: {authorization: token}})
-                      .then(respone => console.log(respone))
-                      .catch(e => console.log(e)) // update data on server
+                  axios
+                    .post(
+                      "https://menurutgersbackend.herokuapp.com/food",
+                      newData,
+                      { headers: { authorization: token } }
+                    )
+                    .then((respone) => console.log(respone))
+                    .catch((e) => console.log(e)); // update data on server
                   return data;
                 });
               }, 600);
@@ -116,13 +117,16 @@ export default function MaterialTableDemo(props) {
                     // console.log(state);
                     // console.log(oldData._id);
                     // console.log(newData._id);
-                    axios.patch("https://menurutgersbackend.herokuapp.com/food/" + id, 
-                    newData,
-                    {headers: {authorization: token}})
-                    .then(respone => console.log(respone))
-                    .catch(e => console.log(e)) // update data on server
-                   
-                   return data;
+                    axios
+                      .patch(
+                        "https://menurutgersbackend.herokuapp.com/food/" + id,
+                        newData,
+                        { headers: { authorization: token } }
+                      )
+                      .then((respone) => console.log(respone))
+                      .catch((e) => console.log(e)); // update data on server
+
+                    return data;
                   });
                 }
               }, 600);
@@ -136,10 +140,13 @@ export default function MaterialTableDemo(props) {
                   data.splice(data.indexOf(oldData), 1);
                   const id = oldData._id;
                   console.log(state);
-                  axios.delete("https://menurutgersbackend.herokuapp.com/food/" + id, 
-                    {headers: {authorization: token}})
-                    .then(respone => console.log(respone))
-                    .catch(e => console.log(e)) // update data on server
+                  axios
+                    .delete(
+                      "https://menurutgersbackend.herokuapp.com/food/" + id,
+                      { headers: { authorization: token } }
+                    )
+                    .then((respone) => console.log(respone))
+                    .catch((e) => console.log(e)); // update data on server
 
                   return data;
                 });
@@ -153,8 +160,12 @@ export default function MaterialTableDemo(props) {
         size="large"
         className={classes.button}
         startIcon={<SaveIcon />}
+        onClick={(e) => {
+         setTimeout(() =>{ setUserState("")},1000);
+          e.preventDefault();
+        }}
       >
-        Save
+        Log Out
       </Button>
       <Button
         variant="contained"
@@ -166,12 +177,14 @@ export default function MaterialTableDemo(props) {
       >
         Delete All
       </Button>
-      <DeleteModal 
+      <DeleteModal
         show={modalDeleteShow}
         onHide={() => setModalDeleteShow(false)}
         onConfirm={() => {
-          setState([])
-          setModalDeleteShow(false)}}/>
+          setState([]);
+          setModalDeleteShow(false);
+        }}
+      />
     </div>
   );
 }
