@@ -89,8 +89,7 @@ export default function SignIn({ setUserState }) {
         setEmail('');
         setPassword('');
       });
-    setEmail('');
-    setPassword('')
+    
   };
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
