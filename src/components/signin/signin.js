@@ -12,7 +12,7 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
-import axios from 'axios'
+import axios from "axios";
 
 const theme = createMuiTheme({
   palette: {
@@ -69,21 +69,28 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function SignIn({setUserState}) {
+export default function SignIn({ setUserState }) {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const onSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const data = {
       email: email,
-      password: password
-    }
+      password: password,
+    };
 
-    axios.post('http://localhost:5000/user/login', data)
-    .then(res =>setUserState(res.data))
-    .catch(e => console.log(e))
-    
+    axios
+      .post("http://localhost:5000/user/login", data)
+      .then((res) => setUserState(res.data))
+      .catch((e) => {
+        console.log(e);
+        alert("Wrong email or password");
+        setEmail('');
+        setPassword('');
+      });
+    setEmail('');
+    setPassword('')
   };
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -118,6 +125,7 @@ export default function SignIn({setUserState}) {
               // className={classes.colorRed}
               color="secondary"
               onChange={handleEmailChange}
+              value={email}
             />
             <TextField
               variant="outlined"
@@ -132,6 +140,7 @@ export default function SignIn({setUserState}) {
               // className={classes.colorRed}
               color="secondary"
               onChange={handlePasswordChange}
+              value={password}
             />
             <FormControlLabel
               control={<Checkbox value="remember" />}
