@@ -12,6 +12,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
 import axios from "axios";
+import { login } from "../../redux/user/userAction";
+import {connect} from "react-redux";
 
 const theme = createMuiTheme({
   palette: {
@@ -68,10 +70,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function SignIn({ setUserState }) {
+const SignIn = (props) => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = props;
   const onSubmit = (e) => {
     e.preventDefault();
     const data = {
@@ -81,14 +84,13 @@ export default function SignIn({ setUserState }) {
 
     axios
       .post("https://menurutgersbackend.herokuapp.com/user/login", data)
-      .then((res) => setUserState(res.data))
+      .then((res) => login(res.data))
       .catch((e) => {
         console.log(e);
         alert("Wrong email or password");
-        setEmail('');
-        setPassword('');
+        setEmail("");
+        setPassword("");
       });
-    
   };
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -109,7 +111,7 @@ export default function SignIn({ setUserState }) {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate={false} onSubmit={onSubmit} >
+          <form className={classes.form} noValidate={false} onSubmit={onSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -164,4 +166,9 @@ export default function SignIn({ setUserState }) {
       </Grid>
     </Grid>
   );
-}
+};
+
+const mapDispatchToProps = dispatch => ({
+  login: (userInformation) => dispatch(login(userInformation))
+})
+export default connect(null, mapDispatchToProps)(SignIn);

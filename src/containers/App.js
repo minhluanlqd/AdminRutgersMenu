@@ -5,17 +5,20 @@ import "./App.css";
 // import { Route, Switch, Redirect } from "react-router-dom";
 import Table from "../components/tables/tables";
 import SignIn from "../components/signin/signin";
+import {connect} from "react-redux"
 
-function App() {
-  let [userState, setUserState] = useState("");
-  console.log(userState);
-  console.log(userState.token);
+function App(props) {
+  let {currentUser} = props;
 
   return (
     <div className="App">
-      {userState ?<Table setUserState={setUserState} token={userState.token} />:<SignIn setUserState={setUserState} /> }
+      {currentUser ?<Table />:<SignIn /> }
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+})
+
+export default connect(mapStateToProps)(App);

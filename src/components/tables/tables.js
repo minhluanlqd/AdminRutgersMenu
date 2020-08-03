@@ -7,6 +7,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SaveIcon from "@material-ui/icons/Save";
 import DeleteModal from "./modalDelete";
+import {connect} from "react-redux";
+import {logout} from "../../redux/user/userAction"
 /*
 change the state into 2 state
 fetch data from server
@@ -19,9 +21,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MaterialTableDemo(props) {
-  const { token } = props;
-  const { setUserState } = props;
+const MaterialTableDemo = (props) => {
+  const { currentUser, logout } = props;
+  const token = currentUser.token;
 
   const classes = useStyles();
 
@@ -161,7 +163,7 @@ export default function MaterialTableDemo(props) {
         className={classes.button}
         startIcon={<SaveIcon />}
         onClick={(e) => {
-         setTimeout(() =>{ setUserState("")},1000);
+         setTimeout(() =>{logout()},1000);
           e.preventDefault();
         }}
       >
@@ -188,3 +190,13 @@ export default function MaterialTableDemo(props) {
     </div>
   );
 }
+
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+})
+
+const mapDispatchToProps =  dispatch => ({
+  logout: () => dispatch(logout())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps) (MaterialTableDemo);
